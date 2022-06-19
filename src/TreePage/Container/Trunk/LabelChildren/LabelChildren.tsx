@@ -1,26 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Item } from 'api/data';
 import { Label } from './Label/Label';
-import { useDispatch } from 'react-redux';
-import { actions } from 'store/data/data';
 
 interface Props {
   items: Item[];
+  li: number;
 }
 
-export const LabelChildren: React.FC<Props> = ({ items }) => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (items.length !== 0){
-      dispatch(actions.increaseLevel());
-    } 
-  },[dispatch, items.length]);
-
-
+export const LabelChildren: React.FC<Props> = ({ items, li }) => {
   return (
     <div>
-      {items && items.map((item) => <Label key={item.id} item={item} />)}
+      {items &&
+        items.map((item) => <Label key={item.id} item={item} li={li} />)}
     </div>
   );
 };

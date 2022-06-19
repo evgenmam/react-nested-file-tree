@@ -1,37 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Item } from '../../../../../api/data';
 import { LabelChildren } from '../LabelChildren';
-import { selectLevel } from '../../../../../store/data/selectors';
-import { useDispatch } from 'react-redux';
-import { actions } from 'store/data/data';
 
 import styles from '../../../../../styles/Home.module.css';
 
 interface Props {
   item: Item;
+  li: number;
 }
-export const Label: React.FC<Props> = ({ item }) => {
-  const dispatch = useDispatch();
-  const selectedLevel = useSelector(selectLevel)
-  const [style, setStyle] = useState(styles.rootlevel);
+export const Label: React.FC<Props> = ({ item, li }) => {
+  const [levelStyle, setLevelStyle] = useState({marginLeft: '0px'});
   useEffect(() => {
-    if (selectedLevel > 0) {
-      setStyle('line');
-    }
-    if (item.parentId === -1){
-      dispatch(actions.resetLevel());
+    if (li > 0) {
+      const marginLeft: string =  (25*li).toString() + 'px';
+      setLevelStyle({marginLeft})
     } 
-  },[setStyle, selectedLevel, item.parentId, dispatch]);
+  },[li]);
 
   return (
     <div>
-      <p className={style}>
-        {item.label} {selectedLevel}
+      <p className={styles.rootlevel} style={levelStyle}>
+        {item.label} {li}
       </p>
       {item.children && (
         <LabelChildren
           items={item.children}
+          li={li+1}
         />
       )}
     </div>

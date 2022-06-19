@@ -7,9 +7,10 @@ interface Props {
 }
 
 export const Trunk: React.FC<Props> = ({ data }) => {
+  const li = 0;
   return (
     <div className='left'>
-      <LabelChildren items={data} />
+      <LabelChildren items={data} li={li} />
     </div>
   );
 };
