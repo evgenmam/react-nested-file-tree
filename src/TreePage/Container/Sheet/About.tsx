@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectDataById } from 'store/data/selectors';
+import { useDispatch } from 'react-redux';
+import { selectDataById } from '../../../store/data/selectors';
+import { actions } from '../../../store/data/data';
 
 export const About: React.FC = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const selected = useSelector(selectDataById(Number(id)));
+  useEffect(() => {
+    if (selected) {
+      dispatch(actions.setSelected(selected));
+    }
+  }, [dispatch, selected]);
+
   return (
     <div>
       {selected === undefined ? (

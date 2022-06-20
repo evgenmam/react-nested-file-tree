@@ -9,10 +9,6 @@ export const selectData = createSelector(getData, (data) => {
   return data.data;
 });
 
-export const selectLevel = createSelector(getData, (data) => {
-  return data.level;
-});
-
 export const selectDataById = (id: number) =>
   createSelector(selectData, (data) => {
     const find = (arr: Item[], id: number): Item | undefined => {
@@ -24,3 +20,7 @@ export const selectDataById = (id: number) =>
     };
     return find(data, id);
   });
+  
+export const selectedItem = createSelector(getData, (data) => {
+  return data.selected;
+});

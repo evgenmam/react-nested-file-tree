@@ -22,7 +22,7 @@ export const Label: React.FC<Props> = ({ item, li }) => {
     <div>
       <Link to={`/about/${item.id.toString()}`}>
         <p className={styles.rootlevel} style={levelStyle}>
-          {item.label} {li}
+          {item.label}
         </p>
       </Link>
         {item.children && <LabelChildren items={item.children} li={li + 1} />}

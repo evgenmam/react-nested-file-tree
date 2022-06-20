@@ -3,13 +3,13 @@ import { Item } from '../../api/data';
 
 export interface DataState {
   data: Item[];
-  level: number;
+  selected: Item | undefined;
   isLoading: boolean;
 }
 
 const initialState: DataState = {
   data: [],
-  level: 0,
+  selected: undefined,
   isLoading: false,
 };
 
@@ -21,13 +21,21 @@ const data = createSlice({
       state.data = action.payload;
       state.isLoading = false;
     },
-    increaseLevel: (state: DataState) => {
-      state.level = state.level + 1;
+    setSelected: (state: DataState, action: PayloadAction<Item>) => {
+      state.selected = action.payload;
     },
-    resetLevel: (state: DataState) => {
-      state.level = 0;
+    resetSelected: (state: DataState) => {
+      state.selected = undefined;
     },
-
+    deleteItem: (state: DataState, action: PayloadAction<{ id: number }>) => {
+      const removeById = (arr: Item[], id: number): Item[]=>{
+        return arr.filter( a => a.id !== id).map( e => {
+          return { ...e, children: removeById(e.children || [], id)}
+        });
+      }
+      state.data = removeById(state.data, action.payload.id);
+      state.selected = undefined;
+    },
   },
 });
 
