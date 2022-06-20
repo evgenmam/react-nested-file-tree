@@ -4,13 +4,12 @@ import { Item } from '../../api/data';
 export interface DataState {
   data: Item[];
   selected: Item | undefined;
-  isLoading: boolean;
+
 }
 
 const initialState: DataState = {
   data: [],
   selected: undefined,
-  isLoading: false,
 };
 
 const data = createSlice({
@@ -19,7 +18,6 @@ const data = createSlice({
   reducers: {
     fillData: (state: DataState, action: PayloadAction<Item[]>) => {
       state.data = action.payload;
-      state.isLoading = false;
     },
     setSelected: (state: DataState, action: PayloadAction<Item>) => {
       state.selected = action.payload;

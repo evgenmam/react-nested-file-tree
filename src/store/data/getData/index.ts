@@ -3,8 +3,8 @@ import { SagaIterator } from 'redux-saga';
 import { apply, put, takeLatest } from 'redux-saga/effects';
 
 import { api } from '../../../api';
-import { actions as actionsError } from '../../error/error';
-import { actions as actionsData} from '../data';
+
+import { actions as actionsData } from '../data';
 
 export const getDataAsync = createAction('getDataAsync');
 
@@ -14,11 +14,9 @@ function* getDataWorker(): SagaIterator<void> {
     yield put(actionsData.fillData(data));
   } catch (error: any) {
     yield put(
-      actionsError.returnErrors({
-        msg: error.response.data,
-        status: error.response.status,
-        id: null,
-      })
+      actionsData.fillData([
+        { id: 0, label: 'Ups, something is wrong', parentId: 0, children: [] },
+      ])
     );
   }
 }
