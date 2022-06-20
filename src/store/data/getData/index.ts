@@ -15,7 +15,7 @@ function* getDataWorker(): SagaIterator<void> {
   } catch (error: any) {
     yield put(
       actionsData.fillData([
-        { id: 0, label: 'Ups, something is wrong', parentId: 0, children: [] },
+        { id: 0, label: 'Ups, something is wrong...', parentId: 0, children: [] },
       ])
     );
   }
