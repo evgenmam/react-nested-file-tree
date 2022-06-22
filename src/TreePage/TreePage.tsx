@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Container } from './Container/Container';
 import { useDispatch } from 'react-redux';
+import { Container } from './Container/Container';
 import { getDataAsync } from '../store/data/getData';
 
 export const TreePage = () => {

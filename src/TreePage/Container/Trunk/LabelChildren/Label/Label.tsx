@@ -55,7 +55,7 @@ export const Label: React.FC<Props> = ({ item, li }) => {
 
   return (
     <div>
-      <Link to={`/about/${item.id.toString()}`}>
+      <Link to={`/about/${item.id.toString()}`} className={styles.link}>
         <p
           className={styles.rootlevel}
           style={levelStyle}

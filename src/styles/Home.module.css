@@ -9,3 +9,7 @@
   cursor: grab;
  
 }
+
+.rootlevel:hover {
+  background: rgb(192, 192, 182);
+}

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Item } from '../../api/data';
+import { removeById, update } from './helpers';
 
 export interface DataState {
   data: Item[];
@@ -26,44 +27,14 @@ const data = createSlice({
     setSelected: (state: DataState, action: PayloadAction<Item>) => {
       state.selected = action.payload;
     },
-    resetSelected: (state: DataState) => {
-      state.selected = undefined;
-    },
     setSelectedDrag: (state: DataState, action: PayloadAction<Item>) => {
       state.selectedDrag = action.payload;
     },
-    resetSelectedDrag: (state: DataState) => {
-      state.selectedDrag = undefined;
-    },
     deleteItem: (state: DataState, action: PayloadAction<{ id: number }>) => {
-      const removeById = (arr: Item[], id: number): Item[] => {
-        return arr
-          .filter((a) => a.id !== id)
-          .map((e) => {
-            return { ...e, children: removeById(e.children || [], id) };
-          });
-      };
       state.data = removeById([...state.data], action.payload.id);
       state.selected = undefined;
     },
     updateItem: (state: DataState, action: PayloadAction<UpdateItem>) => {
-      const removeById = (arr: Item[], id: number): Item[] => {
-        return [...arr].filter((a) => a.id !== id).map((e) => {
-          return { ...e, children: removeById([...e.children] || [], id) };
-        });
-      };
-      const update = (items: Item[], item: Item): Item[] => {
-        const newItems = items.reduce<Item[]>((acc: Item[], cur: Item) => {
-          if (cur.id === item.id) {
-            acc.push({...item});
-          } else {
-            acc.push({ ...cur, children: update([...cur.children], item) });
-          }
-          return acc;
-        }, []);
-        return newItems;
-      };
-
       state.data = update(removeById([...state.data], action.payload.removedId), action.payload.item);
     },
   },
