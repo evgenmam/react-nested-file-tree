@@ -41,9 +41,9 @@ export const Label: React.FC<Props> = ({ item, li }) => {
       dragedItem.parentId !== dropItem.id &&
       !chekParentIds(dragedItem, dropItem.parentId)
     ) {
-      const cleanDrop = cleanDropFromDragItem(dropItem, dragedItem.id)
+      const cleanDrop = cleanDropFromDragItem(dropItem, dragedItem.id);
       const newItem = {
-       ...cleanDrop,
+        ...cleanDrop,
         children: [
           ...cleanDrop.children,
           { ...dragedItem, parentId: cleanDrop.id },
