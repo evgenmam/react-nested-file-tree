@@ -7,6 +7,7 @@ import { selectedDrag } from '../../../../../store/data/selectors';
 import { actions } from '../../../../../store/data/data';
 
 import styles from '../../../../../styles/Home.module.css';
+import { chekParentIds } from './chekParentIds';
 
 interface Props {
   item: Item;
@@ -34,19 +35,26 @@ export const Label: React.FC<Props> = ({ item, li }) => {
 
   const handlerDrop = (e: React.DragEvent<HTMLDivElement>, item: Item) => {
     e.preventDefault();
-    if (dragedItem !== undefined) {
+    if (
+      dragedItem &&
+      dragedItem.id !== item.id &&
+      dragedItem.parentId !== item.id &&
+      !chekParentIds(dragedItem, item.parentId)
+    ) {
       const newItem = {
         ...item,
-        children: [...item.children, dragedItem],
+        children: [...item.children, { ...dragedItem, parentId: item.id }],
       };
       console.log(newItem);
+      // dispatch(actions.resetSelected());
+      // dispatch(actions.resetSelectedDrag());
       dispatch(actions.deleteItem({ id: dragedItem.id }));
       dispatch(actions.updateItem({ item: newItem, removedId: dragedItem.id }));
     }
   };
 
   return (
-    <div>
+    <div key={item.id.toString() + item.parentId.toString()}>
       <Link to={`/about/${item.id.toString()}`}>
         <p
           className={styles.rootlevel}

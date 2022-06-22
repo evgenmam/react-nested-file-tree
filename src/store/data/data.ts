@@ -61,8 +61,6 @@ const data = createSlice({
       };
 
       state.data = update(state.data, action.payload.item);
-      state.selected = undefined;
-      state.selectedDrag = undefined;
     },
   },
 });
