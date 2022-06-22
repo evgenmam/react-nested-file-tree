@@ -5,7 +5,7 @@ import { Item } from '../../../../../api/data';
 import { LabelChildren } from '../LabelChildren';
 import { selectedDrag } from '../../../../../store/data/selectors';
 import { actions } from '../../../../../store/data/data';
-import { chekParentIds } from './chekParentIds';
+import { chekParentIds, cleanDropFromDragItem } from './helpers';
 
 import styles from '../../../../../styles/Home.module.css';
 
@@ -14,7 +14,6 @@ interface Props {
   li: number;
 }
 export const Label: React.FC<Props> = ({ item, li }) => {
-  // const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void
   const [levelStyle, setLevelStyle] = useState({ marginLeft: '0px' });
   useEffect(() => {
     if (li > 0) {
@@ -42,13 +41,15 @@ export const Label: React.FC<Props> = ({ item, li }) => {
       dragedItem.parentId !== dropItem.id &&
       !chekParentIds(dragedItem, dropItem.parentId)
     ) {
+      const cleanDrop = cleanDropFromDragItem(dropItem, dragedItem.id)
       const newItem = {
-        ...dropItem,
-        children: [...dropItem.children, { ...dragedItem, parentId: dropItem.id }],
+       ...cleanDrop,
+        children: [
+          ...cleanDrop.children,
+          { ...dragedItem, parentId: cleanDrop.id },
+        ],
       };
-      console.log(dragedItem.id,dropItem.id , newItem);
       dispatch(actions.updateItem({ item: newItem, removedId: dragedItem.id }));
-      // forceUpdate();
     }
   };
 
