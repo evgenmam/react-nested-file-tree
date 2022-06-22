@@ -5,15 +5,16 @@ import { Item } from '../../../../../api/data';
 import { LabelChildren } from '../LabelChildren';
 import { selectedDrag } from '../../../../../store/data/selectors';
 import { actions } from '../../../../../store/data/data';
+import { chekParentIds } from './chekParentIds';
 
 import styles from '../../../../../styles/Home.module.css';
-import { chekParentIds } from './chekParentIds';
 
 interface Props {
   item: Item;
   li: number;
 }
 export const Label: React.FC<Props> = ({ item, li }) => {
+  // const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void
   const [levelStyle, setLevelStyle] = useState({ marginLeft: '0px' });
   useEffect(() => {
     if (li > 0) {
@@ -33,28 +34,26 @@ export const Label: React.FC<Props> = ({ item, li }) => {
     e.preventDefault();
   };
 
-  const handlerDrop = (e: React.DragEvent<HTMLDivElement>, item: Item) => {
+  const handlerDrop = (e: React.DragEvent<HTMLDivElement>, dropItem: Item) => {
     e.preventDefault();
     if (
       dragedItem &&
-      dragedItem.id !== item.id &&
-      dragedItem.parentId !== item.id &&
-      !chekParentIds(dragedItem, item.parentId)
+      dragedItem.id !== dropItem.id &&
+      dragedItem.parentId !== dropItem.id &&
+      !chekParentIds(dragedItem, dropItem.parentId)
     ) {
       const newItem = {
-        ...item,
-        children: [...item.children, { ...dragedItem, parentId: item.id }],
+        ...dropItem,
+        children: [...dropItem.children, { ...dragedItem, parentId: dropItem.id }],
       };
-      console.log(newItem);
-      // dispatch(actions.resetSelected());
-      // dispatch(actions.resetSelectedDrag());
-      dispatch(actions.deleteItem({ id: dragedItem.id }));
+      console.log(dragedItem.id,dropItem.id , newItem);
       dispatch(actions.updateItem({ item: newItem, removedId: dragedItem.id }));
+      // forceUpdate();
     }
   };
 
   return (
-    <div key={item.id.toString() + item.parentId.toString()}>
+    <div>
       <Link to={`/about/${item.id.toString()}`}>
         <p
           className={styles.rootlevel}

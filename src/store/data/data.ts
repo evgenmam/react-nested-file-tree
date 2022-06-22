@@ -36,6 +36,7 @@ const data = createSlice({
       state.selectedDrag = undefined;
     },
     deleteItem: (state: DataState, action: PayloadAction<{ id: number }>) => {
+      console.log('Hello');
       const removeById = (arr: Item[], id: number): Item[] => {
         return arr
           .filter((a) => a.id !== id)
@@ -43,10 +44,16 @@ const data = createSlice({
             return { ...e, children: removeById(e.children || [], id) };
           });
       };
-      state.data = removeById(state.data, action.payload.id);
+      state.data = removeById([...state.data], action.payload.id);
       state.selected = undefined;
     },
     updateItem: (state: DataState, action: PayloadAction<UpdateItem>) => {
+      const removeById = (arr: Item[], id: number): Item[] => {
+        return [...arr].filter((a) => a.id !== id).map((e) => {
+          return { ...e, children: removeById(e.children || [], id) };
+        });
+      };
+      const data = removeById([...state.data], action.payload.removedId);
       const update = (items: Item[], item: Item): Item[] => {
         const newItems = items.reduce<Item[]>((acc: Item[], cur: Item) => {
           if (cur.id === item.id) {
@@ -60,7 +67,7 @@ const data = createSlice({
         return newItems;
       };
 
-      state.data = update(state.data, action.payload.item);
+      state.data = update(data, action.payload.item);
     },
   },
 });
