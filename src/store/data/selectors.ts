@@ -24,3 +24,6 @@ export const selectDataById = (id: number) =>
 export const selectedItem = createSelector(getData, (data) => {
   return data.selected;
 });
+export const selectedDrag = createSelector(getData, (data) => {
+  return data.selectedDrag;
+});

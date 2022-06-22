@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Item } from '../../../../../api/data';
 import { LabelChildren } from '../LabelChildren';
+import { selectedDrag } from '../../../../../store/data/selectors';
+import { actions } from '../../../../../store/data/data';
 
 import styles from '../../../../../styles/Home.module.css';
 
@@ -18,14 +21,45 @@ export const Label: React.FC<Props> = ({ item, li }) => {
     }
   }, [li]);
 
+  const dispatch = useDispatch();
+  const dragedItem = useSelector(selectedDrag);
+
+  const handlerDragStart = (e: React.DragEvent<HTMLDivElement>, item: Item) => {
+    dispatch(actions.setSelectedDrag(item));
+  };
+
+  const handlerDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handlerDrop = (e: React.DragEvent<HTMLDivElement>, item: Item) => {
+    e.preventDefault();
+    if (dragedItem !== undefined) {
+      const newItem = {
+        ...item,
+        children: [...item.children, dragedItem],
+      };
+      console.log(newItem);
+      dispatch(actions.deleteItem({ id: dragedItem.id }));
+      dispatch(actions.updateItem({ item: newItem, removedId: dragedItem.id }));
+    }
+  };
+
   return (
     <div>
       <Link to={`/about/${item.id.toString()}`}>
-        <p className={styles.rootlevel} style={levelStyle}>
+        <p
+          className={styles.rootlevel}
+          style={levelStyle}
+          draggable={true}
+          onDragStart={(e) => handlerDragStart(e, item)}
+          onDragOver={handlerDragOver}
+          onDrop={(e) => handlerDrop(e, item)}
+        >
           {item.label}
         </p>
       </Link>
-        {item.children && <LabelChildren items={item.children} li={li + 1} />}
+      {item.children && <LabelChildren items={item.children} li={li + 1} />}
     </div>
   );
 };

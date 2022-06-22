@@ -6,4 +6,6 @@
   padding-left: .5rem;
   color: rebeccapurple;
   background: rgb(188, 182, 182);
+  cursor: grab;
+ 
 }
